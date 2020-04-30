@@ -1,0 +1,73 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        {% block css %}
+          <!-- Your custom styles (optional) -->
+          <link href="../../static/css/style.css" rel="stylesheet">
+        {% endblock %}
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        {% block font-awesome %}
+          <link rel="stylesheet" href="../../static/fontawesome_free_5_13_0_web/css/all.min.css">
+          <link rel="stylesheet" href="../../static/fontawesome_free_5_13_0_web/css/fontawesome.min.css">
+        {% endblock %}
+
+        <link rel="shortcut icon" type="image/x-icon" href="../../static/favicon.ICO">
+        {% block title %}<title>Login - Solution Informatique</title>{% endblock %}
+    </head>
+
+<body style="background: #f0f0f0;">
+  <div class="container-fluid">
+
+  <!--  -->
+
+  {% block body %}
+
+  <div class="sidenav">
+   <div class="login-main-text">
+    <h2>Gestionnaire des Tickets</h2>
+    <br><br>
+    <h2>Inscription</h2>
+    <p class="login_a">Si vous avez déjà un compte utilisateur, connectez-vous en (<a href="{% url 'login' %}">cliquant ici </a>).</p>
+   </div>
+  </div>
+
+  <div class="main">
+    <div class="col-md-6 col-sm-12">
+    <div class="login-form">
+      <form action="{% url 'signup' %}" method="post">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+           <label>Username</label>
+           <input type="text" name="username" class="form-control" placeholder="Username">
+        </div>
+
+        <div class="form-group">
+           <label>Mot de passe</label>
+           <input type="password" name="password" class="form-control" placeholder="Mot de passe">
+        </div>
+
+        <div class="form-group">
+           <label>Mot de passe de confirmation</label>
+           <input type="password" name="password_confirm" class="form-control" placeholder="Mot de passe de confirmation">
+        </div>
+
+        <button type="submit" class="btn btn-black login_a">Signup</button>
+     </form>
+    </div>
+   </div>
+  </div>
+
+  {% endblock %}
+
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+  </body>
+</html>

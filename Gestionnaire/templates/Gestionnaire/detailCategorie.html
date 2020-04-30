@@ -1,0 +1,91 @@
+{% extends "Gestionnaire/base.html" %}
+{% load static %}
+
+
+{% block title %}Categorie: {{ categorie.name|safe|truncatewords:"5" }} - gTicket | Gestionnaire {% endblock %}
+
+
+{% block home %}<li><a href="{% url 'home' %}">Accueil</a></li>{% endblock %}
+{% block gTicket %}
+<li class="active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">gTicket<span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a href="{% url 'listTickets' %}"><i class="fas fa-server"></i> Liste-Ticket</a></li>
+    <li><a href="{% url 'addTickets' %}"><i class="fas fa-arrow-alt-circle-up"></i>Ouvrir-Ticket</a></li>
+    <li><a href="{% url 'deleteTickets' %}"><i class="fas fa-server"></i> Supprimer-Ticket</a></li>
+    <li><a href="{% url 'categorizeTickets' %}"><i class="fas fa-archive"></i> Catégoriser-Ticket</a></li>
+    <li><a href="{% url 'etatTickets' %}"><i class="fas fa-archive"></i> Gestion-Etat-Ticket</a></li>
+    <li><a href="{% url 'assignTickets' %}"><i class="fas fa-question-circle"></i> Assigner(Support-Gravité-Delai)-Ticket</a></li>
+  </ul>
+</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+
+    <h4 class="content_header"> Categorie : {{ categorie.name|safe|truncatewords:"10" }}</h4>
+    <hr class="hr_style">
+
+    <div>
+      {% if success %}
+        <p  style="color:green; font-size: 15px;">{{ success }}</p>
+      {% endif %}
+      {% if error %}
+        <p  style="color:red; font-size: 15px;">{{ error }}</p>
+      {% endif %}
+    </div>
+
+    {% if categorie %}
+
+      <table style="width: 100%;" id="example" class="table table-hover table-striped table-bordered dataTable dtr-inline collapsed" role="grid" aria-describedby="example_info">
+        <thead>
+          <tr role="row">
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="categorieName: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Nom</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="IP Address: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Tickets</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Owner: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Supports</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="OS Type: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Description</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="OS Type: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Date</font>
+              </font>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr role="row" class="odd" style="">
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><a href="{% url 'updateTickets' categorie.pk %}" title="Cliquez pour modifier" style="font-weight:bold;">{{ categorie.name }}</a></font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{% for ticket in tickets %} {{ ticket }} <br> {% endfor %}</font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{% for support in supports %} {{ support }} <br> {% endfor %}</font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ categorie.description|safe|linebreaks }}</font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ categorie.date }}</font></font></td>
+          </tr>
+        </tbody>
+      </table>
+    {% else %}
+      <div class="card-header ">
+        <h3>Il n'y a pas d'entrée à afficher</h3>
+      </div>
+    {% endif %}
+
+    <hr class="hr_under_table">
+
+  </div>
+</div>
+{% endblock%}

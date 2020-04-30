@@ -1,0 +1,20 @@
+{% extends "Gestionnaire/base.html" %}
+{% load static %}
+
+
+{% block title %}Gestion des états des tickets - gTicket | Gestionnaire {% endblock %}
+
+
+{% block home %}<li><a href="{% url 'home' %}">Accueil</a></li>{% endblock %}
+{% block gTicket %}
+<li class="active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">gTicket<span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a href="{% url 'listTickets' %}"><i class="fas fa-server"></i> Liste-Ticket</a></li>
+    <li><a href="{% url 'addTickets' %}"><i class="fas fa-arrow-alt-circle-up"></i>Ouvrir-Ticket</a></li>
+    <li><a href="{% url 'deleteTickets' %}"><i class="fas fa-server"></i> Supprimer-Ticket</a></li>
+    <li><a href="{% url 'categorizeTickets' %}"><i class="fas fa-archive"></i> Catégoriser-Ticket</a></li>
+    <li><a href="{% url 'etatTickets' %}"><i class="fas fa-archive"></i> Gestion-Etat-Ticket</a></li>
+    <li><a href="{% url 'assignTickets' %}"><i class="fas fa-question-circle"></i> Assigner(Support-Gravité-Delai)-Ticket</a></li>
+  </ul>
+</li>
+{% endblock %}

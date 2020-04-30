@@ -1,0 +1,184 @@
+{% extends "Gestionnaire/base.html" %}
+{% load static %}
+
+
+{% block title %}Catégorisation des tickets - gTicket | Gestionnaire {% endblock %}
+
+
+{% block home %}<li><a href="{% url 'home' %}">Accueil</a></li>{% endblock %}
+{% block gTicket %}
+<li class="active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">gTicket<span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a href="{% url 'listTickets' %}"><i class="fas fa-server"></i> Liste-Ticket</a></li>
+    <li><a href="{% url 'addTickets' %}"><i class="fas fa-arrow-alt-circle-up"></i>Ouvrir-Ticket</a></li>
+    <li><a href="{% url 'deleteTickets' %}"><i class="fas fa-server"></i> Supprimer-Ticket</a></li>
+    <li><a href="{% url 'categorizeTickets' %}"><i class="fas fa-archive"></i> Catégoriser-Ticket</a></li>
+    <li><a href="{% url 'etatTickets' %}"><i class="fas fa-archive"></i> Gestion-Etat-Ticket</a></li>
+    <li><a href="{% url 'assignTickets' %}"><i class="fas fa-question-circle"></i> Assigner(Support-Gravité-Delai)-Ticket</a></li>
+  </ul>
+</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-12 col-md-8">
+
+    <h4 class="content_header">LISTE - CATEGORIES</h4>
+    <hr class="hr_style">
+
+
+    {% if categories %}
+      {% if query %}
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <p style="color:red; font-weight: 300;font-size: 16px;">Resultat correspondant à "{{ query }} trouvé "</p>
+        </div>
+      </div>
+      {% endif %}
+
+      <table style="width: 100%;" id="example" class="table table-hover table-striped table-bordered dataTable dtr-inline collapsed" role="grid" aria-describedby="example_info">
+        <thead>
+          <tr role="row">
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="categorieName: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Nom</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="IP Address: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Titre - Tickets</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="IP Address: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Supports</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Owner: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Date de Création</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="OS Type: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Description</font>
+              </font>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for categorie in categories %}
+          <tr role="row" class="odd" style="">
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><a href="{% url 'assignTickets' %}" title="Cliquez pour une assignation" style="font-weight:bold;">{{ categorie.name }}</a></font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> {% for ticket in categorie.tickets %} - {{ ticket }} <br> {% endfor %}</font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> {% for support in categorie.supports %} - {{ support }} <br> {% endfor %}</font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ categorie.date }}</font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ categorie.description|safe|truncatewords:"5"|linebreaks }}<a href="{% url 'detailCategorie' categorie.pk %}" style="font-weight:bold;">Lis plus</a></font></font></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="card-header ">
+        <h3>Il n'y a pas d'entrée à afficher</h3>
+      </div>
+
+      {% if query %}
+      <div class="card-header ">
+        <h3>Aucun resultat correspondant à "{{ query }}"</h3>
+      </div>
+      {% endif %}
+
+    {% endif %}
+
+    <hr class="hr_under_table">
+
+    <!-- Paginator -->
+      <div class="row">
+        <p class="col-sm-12 col-md-4">
+        Showing {{ num }} on {{ number_categories }} rows <span>{% if query %}filtering{% endif %}</span> (Page {{ page }})
+        </p>
+        <div class="d-flex flex-column m-auto pagination mt-5 col-sm-12 col-md-8">
+          <nav aria-label="Page navigation">
+            <ul class="pagination pg-grey justify-content-center">
+              {% if categories.has_previous %}
+                    <li class="page-item">
+                  <a class="page-link" href="?{% if query %}q={{query}}&{% endif %}page={{ categories.previous_page_number }}">&laquo; Previous</a>
+                </li>
+                {% endif %}
+
+              {% for i in categories.paginator.page_range %}
+                {% if categories.number == i %}
+                  <li class="page-item active"><a class="page-link">{{ i }}</a></li>
+                {% else %}
+                  {% if i <= 5 %}
+                     <li class="page-item" ><a class="page-link" href="?{% if query %}q={{query}}&{% endif %}page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                  {% if i == 6 %}
+                    <li class="page-item"><a class="page-link">...</a></li>
+                  {% endif %}
+                  {% if i == categories.paginator.num_pages and categories.paginator.num_pages > 5 %}
+                    <li class="page-item"><a href="?{% if query %}q={{query}}&{% endif %}page={{ categories.paginator.num_pages }}" class="page-link">{{ i }}</a></li>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+
+                {% if categories.has_next %}
+                  <li class="page-item">
+                  <a class="page-link" href="?{% if query %}q={{query}}&{% endif %}page={{ categories.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link"  href="?{% if query %}q={{query}}&{% endif %}page={{ categories.paginator.num_pages }}">Last &raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    <!-- end pagination-->
+  </div>
+
+  <div class="hr_vertical"></div>
+
+  <div class="col-sm-12 col-md-4">
+    <h4 class="">AJOUTER - CATEGORIE</h4>
+
+    <hr class="hr_style">
+
+    <div>
+      {% if success %}
+        <p  style="color:green; font-size: 15px;">{{ success }}</p>
+      {% endif %}
+      {% if error %}
+        <p  style="color:red; font-size: 15px;">{{ error }}</p>
+      {% endif %}
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-1"> </div>
+
+      <div class="col-sm-12 col-md-10">
+        <form method="post" action="{% url 'categorizeTickets' %}">
+
+          {% csrf_token %}
+
+          <input type="text" name="name" placeholder="NOM" required>
+
+          <textarea name="description" placeholder="DESCRIPTION DE LA CATEGORIE" required rows="5" cols="80"></textarea>
+
+          <div class="submit_row ">
+            <input type="submit" class="" value="Valider">
+          </div>
+
+        </form>
+      </div>
+
+      <div class="col-sm-12 col-md-1"> </div>
+    </div>
+
+    <!-- <hr class="hr_style"> -->
+  </div>
+
+</div>
+{% endblock%}

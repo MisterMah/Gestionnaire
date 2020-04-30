@@ -1,0 +1,63 @@
+{% extends "Gestionnaire/base.html" %}
+{% load static %}
+
+
+{% block title %}Ajouter un produit - gProduit | Gestionnaire {% endblock %}
+
+
+{% block home %}<li><a href="{% url 'home' %}">Accueil</a></li>{% endblock %}
+{% block produit %}
+<li class="active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">gProduits <span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a href="{% url 'listProduits' %}"><i class="fas fa-server"></i> Liste-Produits</a></li>
+    <li><a href="{% url 'addProduits' %}"><i class="fas fa-arrow-alt-circle-up"></i> Ajouter-Produit</a></li>
+    <li><a href="{% url 'deleteProduits' %}"><i class="fas fa-archive"></i> Supprimer-Produit</a></li>
+    <li><a href="{% url 'listProduits' %}"><i class="fas fa-question-circle"></i> Modifier-Produit</a></li>
+  </ul>
+</li>
+{% endblock %}
+
+{% block content %}
+<div >
+
+    <h4 class="">AJOUTER - PRODUIT</h4>
+
+    <hr class="hr_style">
+
+    <div>
+      {% if success %}
+        <p  style="color:green; font-size: 15px;">{{ success }}</p>
+      {% endif %}
+      {% if error %}
+        <p  style="color:red; font-size: 15px;">{{ error }}</p>
+      {% endif %}
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-3"> </div>
+
+      <div class="col-sm-12 col-md-6">
+        <form method="post" action="{% url 'addProduits' %}">
+
+          {% csrf_token %}
+
+          <input type="text" name="name" placeholder="NOM" required>
+
+          <input type="text" name="version" placeholder="VERSION" required>
+
+          <textarea name="description" placeholder="DESCRIPTION DU PRODUIT" required rows="5" cols="80"></textarea>
+
+          <div class="submit_row ">
+            <input type="submit" class="" value="Valider">
+          </div>
+
+        </form>
+      </div>
+
+      <div class="col-sm-12 col-md-3"> </div>
+    </div>
+
+    <hr class="hr_style">
+
+</div>
+{% endblock%}

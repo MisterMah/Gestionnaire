@@ -1,0 +1,188 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% block css %}
+      <!-- Your custom styles (optional) -->
+      <link href="../../static/css/style.css" rel="stylesheet">
+    {% endblock %}
+
+    {% block bootstrap %}
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    {% endblock %}
+
+    {% block font-awesome %}
+      <link rel="stylesheet" href="../../static/fontawesome_free_5_13_0_web/css/all.min.css">
+      <link rel="stylesheet" href="../../static/fontawesome_free_5_13_0_web/css/fontawesome.min.css">
+    {% endblock %}
+
+    <link rel="shortcut icon" type="image/x-icon" href="../../static/favicon.ICO">
+    <title>{% block title %}Accueil{% endblock %} |  {% block titleBrand %}Solution Informatique{% endblock %}</title>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+
+      <!-- NavBar Block -->
+      {% block navbar %}
+      <div class="row navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12">
+
+              <div class="navbar-header">
+                <button class="navbar-toggle" data-target="#mobile_menu" data-toggle="collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                <a href="{% url 'home' %}" class="navbar-brand">Solution Informatique</a>
+              </div>
+
+              <div class="navbar-collapse collapse" id="mobile_menu">
+                <ul class="nav navbar-nav">
+                    {% block home %}
+                    <li class="active"><a href="{% url 'home' %}">Accueil</a></li>
+                    {% endblock %}
+
+                    {% block produit %}
+                    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">gProduits <span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="{% url 'listProduits' %}"><i class="fas fa-server"></i> Liste-Produits</a></li>
+                        <li><a href="{% url 'addProduits' %}"><i class="fas fa-arrow-alt-circle-up"></i> Ajouter-Produit</a></li>
+                        <li><a href="{% url 'deleteProduits' %}"><i class="fas fa-archive"></i> Supprimer-Produit</a></li>
+                        <li><a href="{% url 'listProduits' %}"><i class="fas fa-question-circle"></i> Modifier-Produit</a></li>
+                      </ul>
+                    </li>
+                    {% endblock %}
+
+                    {% block gUtilisateurs %}
+                    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">gUtilisateurs <span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="{% url 'listUtilisateurs' %}"><i class="fas fa-server"></i> Liste-Utilisateurs</a></li>
+                        <li><a href="{% url 'addUtilisateurs' %}"><i class="fas fa-arrow-alt-circle-up"></i> Ajouter-Utilisateur</a></li>
+                        <li><a href="{% url 'deleteUtilisateurs' %}"><i class="fas fa-archive"></i> Supprimer-Utilisateur</a></li>
+                        <li><a href="{% url 'listUtilisateurs' %}"><i class="fas fa-question-circle"></i> Modifier-Utilisateur</a></li>
+                        <li><a href="{% url 'permissionUtilisateurs' %}"><i class="fas fa-question-circle"></i> Attribuer-Permissions</a></li>
+                      </ul>
+                    </li>
+                    {% endblock %}
+
+                    {% block gTicket %}
+                    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">gTicket<span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="{% url 'listTickets' %}"><i class="fas fa-server"></i> Liste-Ticket</a></li>
+                        <li><a href="{% url 'addTickets' %}"><i class="fas fa-arrow-alt-circle-up"></i>Ouvrir-Ticket</a></li>
+                        <li><a href="{% url 'deleteTickets' %}"><i class="fas fa-server"></i> Supprimer-Ticket</a></li>
+                        <li><a href="{% url 'categorizeTickets' %}"><i class="fas fa-archive"></i> Catégoriser-Ticket</a></li>
+                        <li><a href="{% url 'etatTickets' %}"><i class="fas fa-archive"></i> Gestion-Etat-Ticket</a></li>
+                        <li><a href="{% url 'assignTickets' %}"><i class="fas fa-question-circle"></i> Assigner(Support-Gravité-Delai)-Ticket</a></li>
+                      </ul>
+                    </li>
+                    {% endblock %}
+                </ul>
+                <ul class="nav navbar-nav">
+                  <li>
+                    <form action="" class="navbar-form">
+                      <div class="form-group">
+                        <div class="input-group">
+                          {% block search %}
+                            <!-- <input type="search" name="search" id="" placeholder="Search Anything Here..." class="form-control">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span> -->
+                          {% endblock %}
+                        </div>
+                      </div>
+                    </form>
+                  </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                  {% if request.user.username %}
+                    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          {% if request.user.is_superuser == True %}
+                            <li><a href="/admin/"><i class="fas fa-users-cog"></i> Admin Site</a></li>
+                          {% endif %}
+                            <li><a href="#"><i class="fas fa-info-circle"></i> Infos</a></li>
+                            <li><a href="{% url 'logout_view' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                  {% else %}
+                    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login / Sign Up <span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">Login</a></li>
+                        <li><a href="#">Sign Up</a></li>
+                      </ul>
+                    </li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endblock %}
+      <!-- NavBar EndBlock -->
+
+
+      <!-- Content Block -->
+
+        <div class="container">
+          {% block content %}
+            <br>
+            <br>
+            <p>Content</p>
+            <br>
+            <br>
+          {% endblock %}
+        </div>
+
+      <!-- Content EndBlock -->
+
+
+      <!-- Site footer -->
+      <footer class=" row site-footer">
+          <div class="container">
+              <div class="row">
+
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                      <p class="copyright-text">
+                        &copy; Copyright <span id="s_annee"></span>
+                        <a href="#">@Solution Informatique</a>
+                        - All Rights Reserved.
+                      </p>
+                  </div>
+
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                      <p class="copyright-text">
+                        <a href="{% url 'logout_view' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        {% if request.user.is_superuser == True  %}
+                          - <a href="/admin/">Access to Admin Site</a>
+                        {% endif %}
+                      </p>
+                  </div>
+
+              </div>
+          </div>
+      </footer>
+
+    </div>
+
+
+    <!-- Script Block -->
+    {% block script %}
+
+    <script type="text/javascript">
+  		var today=new Date();
+  		var annee = today.getFullYear();
+  		var sannee = document.getElementById('s_annee');
+  		sannee.innerHTML = annee;
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="../../static/fontawesome_free_5_13_0_web/js/all.min.js"></script>
+    <script src="../../static/fontawesome_free_5_13_0_web/js/fontawesome.min.js"></script>
+
+    {% endblock script %}
+    <!-- Script EndBlock -->
+  </body>
+</html>

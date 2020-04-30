@@ -1,0 +1,18 @@
+{% extends "Gestionnaire/base.html" %}
+{% load static %}
+
+
+{% block title %}Supprimer un produit - gProduit | Gestionnaire {% endblock %}
+
+
+{% block home %}<li><a href="{% url 'home' %}">Accueil</a></li>{% endblock %}
+{% block produit %}
+<li class="active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">gProduits <span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a href="{% url 'listProduits' %}"><i class="fas fa-server"></i> Liste-Produits</a></li>
+    <li><a href="{% url 'addProduits' %}"><i class="fas fa-arrow-alt-circle-up"></i> Ajouter-Produit</a></li>
+    <li><a href="{% url 'deleteProduits' %}"><i class="fas fa-archive"></i> Supprimer-Produit</a></li>
+    <li><a href="{% url 'listProduits' %}"><i class="fas fa-question-circle"></i> Modifier-Produit</a></li>
+  </ul>
+</li>
+{% endblock %}

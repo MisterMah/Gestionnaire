@@ -1,0 +1,149 @@
+{% extends "Gestionnaire/base.html" %}
+{% load static %}
+
+
+{% block title %}Liste des produits - gProduit | Gestionnaire {% endblock %}
+
+
+{% block home %}<li><a href="{% url 'home' %}">Accueil</a></li>{% endblock %}
+{% block produit %}
+<li class="active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">gProduits <span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a href="{% url 'listProduits' %}"><i class="fas fa-server"></i> Liste-Produits</a></li>
+    <li><a href="{% url 'addProduits' %}"><i class="fas fa-arrow-alt-circle-up"></i> Ajouter-Produit</a></li>
+    <li><a href="{% url 'deleteProduits' %}"><i class="fas fa-archive"></i> Supprimer-Produit</a></li>
+    <li><a href="{% url 'listProduits' %}"><i class="fas fa-question-circle"></i> Modifier-Produit</a></li>
+  </ul>
+</li>
+{% endblock %}
+
+
+{% block search %}
+  <input type="search" name="search" id="" placeholder="Rechercher Produits..." class="form-control">
+  <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+
+    <h4 class="content_header">LISTE - PRODUITS</h4>
+    <hr class="hr_style">
+
+    <div>
+      {% if success %}
+        <p  style="color:green; font-size: 15px;">{{ success }}</p>
+      {% endif %}
+      {% if error %}
+        <p  style="color:red; font-size: 15px;">{{ error }}</p>
+      {% endif %}
+    </div>
+
+    {% if produits %}
+      {% if query %}
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <p style="color:red; font-weight: 300;font-size: 16px;">Resultat correspondant à "{{ query }} trouvé "</p>
+        </div>
+      </div>
+      {% endif %}
+
+      <table style="width: 100%;" id="example" class="table table-hover table-striped table-bordered dataTable dtr-inline collapsed" role="grid" aria-describedby="example_info">
+        <thead>
+          <tr role="row">
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="produitName: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Nom</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="IP Address: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Version</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Owner: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Description</font>
+              </font>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="OS Type: activer pour trier la colonne par ordre croissant">
+              <font style="vertical-align: inherit;">
+                <font style="vertical-align: inherit;">Date - Creation</font>
+              </font>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for produit in produits %}
+          <tr role="row" class="odd" style="">
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><a href="{% url 'updateProduits' produit.pk %}" title="Cliquez pour modifier" style="font-weight:bold;">{{ produit.name }}</a></font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ produit.version }}</font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ produit.description|safe|truncatewords:"5"|linebreaks }}<a href="{% url 'detailProduits' produit.pk %}" style="font-weight:bold;">Lis plus</a></font></font></td>
+            <td class="style_td"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ produit.dateCreation }}</font></font></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="card-header ">
+        <h3>Il n'y a pas d'entrée à afficher</h3>
+      </div>
+
+      {% if query %}
+      <div class="card-header ">
+        <h3>Aucun resultat correspondant à "{{ query }}"</h3>
+      </div>
+      {% endif %}
+
+    {% endif %}
+
+    <hr class="hr_under_table">
+
+    <!-- Paginator -->
+      <div class="row">
+        <p class="col-sm-12 col-md-4">
+        Showing {{ num }} on {{ number_produits }} rows <span>{% if query %}filtering{% endif %}</span> (Page {{ page }})
+        </p>
+        <div class="d-flex flex-column m-auto pagination mt-5 col-sm-12 col-md-8">
+          <nav aria-label="Page navigation">
+            <ul class="pagination pg-grey justify-content-center">
+              {% if produits.has_previous %}
+                    <li class="page-item">
+                  <a class="page-link" href="?{% if query %}q={{query}}&{% endif %}page={{ produits.previous_page_number }}">&laquo; Previous</a>
+                </li>
+                {% endif %}
+
+              {% for i in produits.paginator.page_range %}
+                {% if produits.number == i %}
+                  <li class="page-item active"><a class="page-link">{{ i }}</a></li>
+                {% else %}
+                  {% if i <= 10 %}
+                     <li class="page-item" ><a class="page-link" href="?{% if query %}q={{query}}&{% endif %}page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                  {% if i == 11 %}
+                    <li class="page-item"><a class="page-link">...</a></li>
+                  {% endif %}
+                  {% if i == produits.paginator.num_pages and produits.paginator.num_pages > 10 %}
+                    <li class="page-item"><a href="?{% if query %}q={{query}}&{% endif %}page={{ produits.paginator.num_pages }}" class="page-link">{{ i }}</a></li>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+
+                {% if produits.has_next %}
+                  <li class="page-item">
+                  <a class="page-link" href="?{% if query %}q={{query}}&{% endif %}page={{ produits.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link"  href="?{% if query %}q={{query}}&{% endif %}page={{ produits.paginator.num_pages }}">Last &raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    <!-- end pagination-->
+
+  </div>
+</div>
+{% endblock%}
